@@ -29,7 +29,7 @@ class UploadFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var resultTextView: TextView
 
-    private val NUM_CLASSES = 3
+    private val NUM_CLASSES = 4
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,7 +122,7 @@ class UploadFragment : Fragment() {
         return try {
             val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
             val input = Array(1) { Array(224) { Array(224) { FloatArray(3) } } }
-            val output = Array(1) { FloatArray(NUM_CLASSES) }
+            val output = Array(1) { FloatArray(NUM_CLASSES) }  // Now NUM_CLASSES is 4
 
             for (x in 0 until 224) {
                 for (y in 0 until 224) {
@@ -136,17 +136,19 @@ class UploadFragment : Fragment() {
             tflite.run(input, output)
 
             val maxIndex = output[0].indices.maxByOrNull { output[0][it] } ?: -1
-            val diseaseLabels = listOf("Cataract", "Glaucoma", "Healthy")
+            val diseaseLabels = listOf("Cataract", "Glaucoma", "Healthy", "Unknown")  // Adjust to match NUM_CLASSES
             if (maxIndex != -1) {
                 "Detected: ${diseaseLabels[maxIndex]} with confidence ${output[0][maxIndex]}"
             } else {
                 "Could not detect disease."
             }
         } catch (e: Exception) {
+            Log.e("ERRORTENSOR",e.message.toString())
             e.printStackTrace()
-            "Error processing image."
+            "Error processing image: ${e.message}"
         }
     }
+
 
     private fun saveDetectionHistory(fileName: String, result: String) {
         val sharedPref = requireContext().getSharedPreferences("DetectionHistory", Context.MODE_PRIVATE)

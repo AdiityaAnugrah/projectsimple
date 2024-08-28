@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.project.deteksimata.sharedPreference.History
+import com.project.deteksimata.sharedPreference.HistoryPreference
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
@@ -28,6 +30,7 @@ class UploadFragment : Fragment() {
     private lateinit var tflite: Interpreter
     private lateinit var imageView: ImageView
     private lateinit var resultTextView: TextView
+    private  lateinit var historyPreference: HistoryPreference
 
     private val NUM_CLASSES = 4
 
@@ -40,7 +43,7 @@ class UploadFragment : Fragment() {
         val uploadButton: Button = view.findViewById(R.id.button_upload)
         imageView = view.findViewById(R.id.image_view)
         resultTextView = view.findViewById(R.id.result_text)
-
+        historyPreference = HistoryPreference(requireContext())
         try {
             tflite = Interpreter(loadModelFile())
         } catch (e: Exception) {
@@ -96,7 +99,9 @@ class UploadFragment : Fragment() {
                     resultTextView.text = result
 
                     val fileName = uri.lastPathSegment?.split("/")?.last() ?: "Unknown File"
-                    saveDetectionHistory(fileName, result)
+                    val listHistory = ArrayList<History>()
+                    listHistory.add(History(filename = fileName, result = result))
+                    historyPreference.saveHistory(listHistory, "historyPref")
                 } else {
                     resultTextView.text = "Failed to load image."
                 }
@@ -149,13 +154,4 @@ class UploadFragment : Fragment() {
         }
     }
 
-
-    private fun saveDetectionHistory(fileName: String, result: String) {
-        val sharedPref = requireContext().getSharedPreferences("DetectionHistory", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        val currentHistory = sharedPref.getStringSet("history", mutableSetOf()) ?: mutableSetOf()
-        currentHistory.add("$fileName: $result")
-        editor.putStringSet("history", currentHistory)
-        editor.apply()
-    }
 }

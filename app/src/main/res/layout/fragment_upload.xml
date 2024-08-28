@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?android:attr/windowBackground">
 
     <ImageView
         android:id="@+id/image_view"
@@ -12,20 +13,30 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/ic_upload" />
 
     <Button
         android:id="@+id/button_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Image" />
+        android:text="Upload Image"
+        android:layout_marginTop="16dp"
+        android:padding="10dp" />
 
     <TextView
         android:id="@+id/result_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Result: "
-        android:textSize="18sp" />
+        android:padding="8dp"
+        android:background="@drawable/result_text_background"
+        android:text="Hasil: "
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_gravity="center" />
 
 </LinearLayout>

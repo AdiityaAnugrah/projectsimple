@@ -25,12 +25,13 @@ import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
+
 class UploadFragment : Fragment() {
 
     private lateinit var tflite: Interpreter
     private lateinit var imageView: ImageView
     private lateinit var resultTextView: TextView
-    private  lateinit var historyPreference: HistoryPreference
+    private lateinit var historyPreference: HistoryPreference
 
     private val NUM_CLASSES = 4
 
@@ -44,6 +45,7 @@ class UploadFragment : Fragment() {
         imageView = view.findViewById(R.id.image_view)
         resultTextView = view.findViewById(R.id.result_text)
         historyPreference = HistoryPreference(requireContext())
+
         try {
             tflite = Interpreter(loadModelFile())
         } catch (e: Exception) {
@@ -59,13 +61,19 @@ class UploadFragment : Fragment() {
     }
 
     private fun checkPermissionAndOpenGallery() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+        val readMediaPermission = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+        if (ContextCompat.checkSelfPermission(requireContext(), readMediaPermission)
             == PackageManager.PERMISSION_GRANTED) {
             openGallery()
         } else {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                arrayOf(readMediaPermission),
                 1
             )
         }
@@ -113,7 +121,6 @@ class UploadFragment : Fragment() {
         }
     }
 
-
     private fun loadModelFile(): MappedByteBuffer {
         val fileDescriptor = requireContext().assets.openFd("trained_model.tflite")
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
@@ -127,7 +134,7 @@ class UploadFragment : Fragment() {
         return try {
             val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
             val input = Array(1) { Array(224) { Array(224) { FloatArray(3) } } }
-            val output = Array(1) { FloatArray(NUM_CLASSES) }  // Now NUM_CLASSES is 4
+            val output = Array(1) { FloatArray(NUM_CLASSES) }
 
             for (x in 0 until 224) {
                 for (y in 0 until 224) {
@@ -141,17 +148,16 @@ class UploadFragment : Fragment() {
             tflite.run(input, output)
 
             val maxIndex = output[0].indices.maxByOrNull { output[0][it] } ?: -1
-            val diseaseLabels = listOf("Cataract", "Glaucoma", "Healthy", "Unknown")  // Adjust to match NUM_CLASSES
+            val diseaseLabels = listOf("Cataract", "Glaucoma", "Healthy", "Unknown")
             if (maxIndex != -1) {
                 "Detected: ${diseaseLabels[maxIndex]} with confidence ${output[0][maxIndex]}"
             } else {
                 "Could not detect disease."
             }
         } catch (e: Exception) {
-            Log.e("ERRORTENSOR",e.message.toString())
+            Log.e("ERRORTENSOR", e.message.toString())
             e.printStackTrace()
             "Error processing image: ${e.message}"
         }
     }
-
 }

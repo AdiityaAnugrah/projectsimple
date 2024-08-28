@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ArticleAdapter(private val articles: List<Article>) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
+class ArticleAdapter(
+    private val articles: List<Article>,
+    private val onItemClick: (Article) -> Unit // Listener untuk klik item
+) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.article_title)
@@ -22,6 +25,11 @@ class ArticleAdapter(private val articles: List<Article>) : RecyclerView.Adapter
         val article = articles[position]
         holder.title.text = article.title
         holder.content.text = article.content
+
+        // Menambahkan listener untuk item klik
+        holder.itemView.setOnClickListener {
+            onItemClick(article) // Panggil lambda function saat item diklik
+        }
     }
 
     override fun getItemCount(): Int = articles.size

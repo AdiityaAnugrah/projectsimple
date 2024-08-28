@@ -1,5 +1,6 @@
 package com.project.deteksimata
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,23 +21,35 @@ class HomeFragment : Fragment() {
         val viewPager: ViewPager2 = view.findViewById(R.id.viewPager)
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
 
-        // Dummy data for ViewPager2
+        // Data dummy untuk ViewPager2
         val cards = listOf(
             CardItem(R.drawable.ic_eye, "Eye Disease 1"),
             CardItem(R.drawable.ic_eye, "Eye Disease 2"),
             CardItem(R.drawable.ic_eye, "Eye Disease 3")
         )
-        val viewPagerAdapter = ViewPagerAdapter(cards)
+        val viewPagerAdapter = ViewPagerAdapter(cards) { cardItem ->
+            // Mulai ListArticleActivity ketika kartu diklik
+            val intent = Intent(context, ListArticleActivity::class.java)
+            intent.putExtra("CATEGORY", cardItem.title)
+            startActivity(intent)
+        }
         viewPager.adapter = viewPagerAdapter
 
-        // Dummy data for RecyclerView
+        // Data dummy untuk RecyclerView
         val articles = listOf(
             Article("Article 1", "Content of Article 1"),
             Article("Article 2", "Content of Article 2"),
             Article("Article 3", "Content of Article 3")
         )
+        val articleAdapter = ArticleAdapter(articles) { article ->
+            // Mulai ArticleDetailActivity ketika artikel diklik
+            val intent = Intent(context, ArticleDetailActivity::class.java)
+            intent.putExtra("ARTICLE_TITLE", article.title)
+            intent.putExtra("ARTICLE_CONTENT", article.content)
+            startActivity(intent)
+        }
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ArticleAdapter(articles)
+        recyclerView.adapter = articleAdapter
 
         return view
     }

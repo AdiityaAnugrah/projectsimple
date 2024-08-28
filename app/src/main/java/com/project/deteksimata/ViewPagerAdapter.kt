@@ -7,7 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ViewPagerAdapter(private val items: List<CardItem>) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
+class ViewPagerAdapter(
+    private val items: List<CardItem>,
+    private val onCardClick: (CardItem) -> Unit // Listener untuk menangani klik pada item
+) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageView)
@@ -23,6 +26,11 @@ class ViewPagerAdapter(private val items: List<CardItem>) : RecyclerView.Adapter
         val item = items[position]
         holder.imageView.setImageResource(item.imageResId)
         holder.title.text = item.title
+
+        // Menambahkan listener klik pada item
+        holder.itemView.setOnClickListener {
+            onCardClick(item) // Panggil lambda function saat item diklik
+        }
     }
 
     override fun getItemCount(): Int = items.size

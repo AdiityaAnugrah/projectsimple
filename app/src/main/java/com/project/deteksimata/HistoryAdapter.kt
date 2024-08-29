@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.project.deteksimata.sharedPreference.History
+import com.project.deteksimata.room.HistoryCacheEntity
 
-class HistoryAdapter(private val historyList: ArrayList<History>) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(private val historyList: List<HistoryCacheEntity>) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val historyTextView: TextView = view.findViewById(R.id.historyTextView)

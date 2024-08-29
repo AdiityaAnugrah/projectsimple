@@ -18,8 +18,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.project.deteksimata.sharedPreference.History
-import com.project.deteksimata.sharedPreference.HistoryPreference
+import androidx.lifecycle.lifecycleScope
+import com.project.deteksimata.room.HistoryCacheEntity
+import com.project.deteksimata.room.HistoryDatabase
+import com.project.deteksimata.room.HistoryRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
@@ -31,7 +35,7 @@ class UploadFragment : Fragment() {
     private lateinit var tflite: Interpreter
     private lateinit var imageView: ImageView
     private lateinit var resultTextView: TextView
-    private lateinit var historyPreference: HistoryPreference
+    private lateinit var historyRepository: HistoryRepository
 
     private val NUM_CLASSES = 4
 
@@ -44,7 +48,10 @@ class UploadFragment : Fragment() {
         val uploadButton: Button = view.findViewById(R.id.button_upload)
         imageView = view.findViewById(R.id.image_view)
         resultTextView = view.findViewById(R.id.result_text)
-        historyPreference = HistoryPreference(requireContext())
+        val historyDatabase = HistoryDatabase.getInstance(requireContext())
+        val historyDao = historyDatabase.historyDao()
+        // Initialize the repository
+        historyRepository = HistoryRepository(historyDao)
 
         try {
             tflite = Interpreter(loadModelFile())
@@ -84,7 +91,7 @@ class UploadFragment : Fragment() {
         intent.type = "image/*"
         startActivityForResult(intent, 1)
     }
-
+    @Deprecated("This method is deprecated. Use the new Activity Result APIs.")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openGallery()
@@ -92,7 +99,7 @@ class UploadFragment : Fragment() {
             resultTextView.text = "Permission denied."
         }
     }
-
+    @Deprecated("This method is deprecated. Use the new Activity Result APIs.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -107,9 +114,8 @@ class UploadFragment : Fragment() {
                     resultTextView.text = result
 
                     val fileName = uri.lastPathSegment?.split("/")?.last() ?: "Unknown File"
-                    val listHistory = ArrayList<History>()
-                    listHistory.add(History(filename = fileName, result = result))
-                    historyPreference.saveHistory(listHistory, "historyPref")
+                    val historyItem = HistoryCacheEntity(filename = fileName, result = result)
+                    saveHistory(historyItem)
                 } else {
                     resultTextView.text = "Failed to load image."
                 }
@@ -118,6 +124,13 @@ class UploadFragment : Fragment() {
             }
         } else {
             resultTextView.text = "Image upload canceled."
+        }
+    }
+
+    private fun saveHistory(historyItem: HistoryCacheEntity) {
+        // Use coroutine to perform database operation asynchronously
+        lifecycleScope.launch(Dispatchers.IO) {
+            historyRepository.saveHistory(historyItem)
         }
     }
 

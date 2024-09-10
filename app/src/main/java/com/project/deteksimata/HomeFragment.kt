@@ -1,10 +1,12 @@
 package com.project.deteksimata
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +25,9 @@ class HomeFragment : Fragment() {
 
         // Data dummy untuk ViewPager2
         val cards = listOf(
-            CardItem(R.drawable.ic_eye, "Eye Disease 1"),
-            CardItem(R.drawable.ic_eye, "Eye Disease 2"),
-            CardItem(R.drawable.ic_eye, "Eye Disease 3")
+            CardItem(R.drawable.sample, "Eye Disease 1"),
+            CardItem(R.drawable.sample, "Eye Disease 2"),
+            CardItem(R.drawable.sample, "Eye Disease 3")
         )
         val viewPagerAdapter = ViewPagerAdapter(cards) { cardItem ->
             // Mulai ListArticleActivity ketika kartu diklik
@@ -34,6 +36,8 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         viewPager.adapter = viewPagerAdapter
+        val itemDecoration = HorizontalMarginItemDecoration(10)
+        viewPager.addItemDecoration(itemDecoration)
 
         // Data dummy untuk RecyclerView
         val articles = listOf(
@@ -52,5 +56,14 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = articleAdapter
 
         return view
+    }
+}
+
+
+class HorizontalMarginItemDecoration(private val horizontalMarginInPx: Int) : RecyclerView.ItemDecoration() {
+
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        outRect.right = horizontalMarginInPx
+        outRect.left = horizontalMarginInPx
     }
 }

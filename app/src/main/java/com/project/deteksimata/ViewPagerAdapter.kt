@@ -13,8 +13,8 @@ class ViewPagerAdapter(
 ) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.imageView)
-        val title: TextView = view.findViewById(R.id.title)
+        val imageView: ImageView = view.findViewById(R.id.imgViewPager)
+        val title: TextView = view.findViewById(R.id.titleViewPager)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

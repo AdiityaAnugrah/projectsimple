@@ -19,7 +19,7 @@
         android:id="@+id/button_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Image"
+        android:text="@string/upload_image"
         android:layout_marginTop="16dp"
         android:padding="10dp" />
 
@@ -30,7 +30,7 @@
         android:layout_marginTop="16dp"
         android:padding="8dp"
         android:background="@drawable/result_text_background"
-        android:text="Hasil: "
+        android:text="@string/result"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:textAlignment="center"

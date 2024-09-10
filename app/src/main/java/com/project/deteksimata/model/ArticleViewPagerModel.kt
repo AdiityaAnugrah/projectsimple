@@ -1,3 +1,4 @@
+
 package com.project.deteksimata.model
 
 import android.os.Parcelable

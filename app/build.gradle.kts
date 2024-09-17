@@ -53,4 +53,5 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)  // Using KSP for Room annotations processing
     implementation(libs.room.ktx)
+    implementation(libs.bumptech.glide)
 }

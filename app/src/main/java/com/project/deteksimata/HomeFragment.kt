@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import articleList
+import com.project.deteksimata.model.articleListViewPager
 
 class HomeFragment : Fragment() {
 
@@ -23,13 +24,8 @@ class HomeFragment : Fragment() {
         val viewPager: ViewPager2 = view.findViewById(R.id.viewPager)
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
 
-        // Data dummy untuk ViewPager2
-        val cards = listOf(
-            CardItem(R.drawable.sample, "Eye Disease 1"),
-            CardItem(R.drawable.sample, "Eye Disease 2"),
-            CardItem(R.drawable.sample, "Eye Disease 3")
-        )
-        val viewPagerAdapter = ViewPagerAdapter(cards) { cardItem ->
+
+        val viewPagerAdapter = ViewPagerAdapter(articleListViewPager) { cardItem ->
             // Mulai ListArticleActivity ketika kartu diklik
             val intent = Intent(context, ListArticleActivity::class.java)
             intent.putExtra("CATEGORY", cardItem.title)
@@ -39,13 +35,7 @@ class HomeFragment : Fragment() {
         val itemDecoration = HorizontalMarginItemDecoration(10)
         viewPager.addItemDecoration(itemDecoration)
 
-        // Data dummy untuk RecyclerView
-        val articles = listOf(
-            Article("Article 1", "Content of Article 1"),
-            Article("Article 2", "Content of Article 2"),
-            Article("Article 3", "Content of Article 3")
-        )
-        val articleAdapter = ArticleAdapter(articles) { article ->
+        val articleAdapter = ArticleAdapter(articleList) { article ->
             // Mulai ArticleDetailActivity ketika artikel diklik
             val intent = Intent(context, ArticleDetailActivity::class.java)
             intent.putExtra("ARTICLE_TITLE", article.title)

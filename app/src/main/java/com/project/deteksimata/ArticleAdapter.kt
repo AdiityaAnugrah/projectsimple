@@ -1,5 +1,6 @@
 package com.project.deteksimata
 
+import ArticleModel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ArticleAdapter(
-    private val articles: List<Article>,
-    private val onItemClick: (Article) -> Unit // Listener untuk klik item
+    private val articles: ArrayList<ArticleModel>,
+    private val onItemClick: (ArticleModel) -> Unit // Listener untuk klik item
 ) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,4 +36,3 @@ class ArticleAdapter(
     override fun getItemCount(): Int = articles.size
 }
 
-data class Article(val title: String, val content: String)

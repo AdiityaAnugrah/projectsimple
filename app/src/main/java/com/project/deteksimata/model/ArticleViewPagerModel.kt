@@ -25,4 +25,10 @@ val articleListViewPager: ArrayList<ArticleViewPagerModel> = arrayListOf(
         content = "Glaukoma adalah penyakit yang merusak saraf optik mata dan dapat menyebabkan kehilangan penglihatan permanen jika tidak segera diobati. Glaukoma sering dikaitkan dengan peningkatan tekanan di dalam mata.",
         img = "https://d324bm9stwnv8c.cloudfront.net/Glaukoma_Bisa_Sebabkan_Kebutaan,_Atasi_Segera.jpg"
     ),
+    ArticleViewPagerModel(
+        id = 3,
+        title = "Konjungtivitis",
+        content = "Konjungtivitis ini terjadi akibat adanya peradangan yang membuat mata merah, perih, gatal, dan berair. Konjungtivitis bisa disebabkan oleh alergi atau iritasi pada mata. Namun, bisa juga disebabkan oleh infeksi bakteri yang membuat konjungtiva mengeluarkan nanah.",
+        img = "https://res.cloudinary.com/dk0z4ums3/image/upload/v1656999099/attached_image/konjungtivitis-0-alodokter.jpg"
+    ),
 )

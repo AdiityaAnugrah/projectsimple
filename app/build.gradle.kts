@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13" // Add the KSP version here
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("kotlin-parcelize")
 }
 
@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.tensorflow.lite.support)
     implementation(libs.gson)
     implementation(libs.room.runtime)
-    ksp(libs.room.compiler)  // Using KSP for Room annotations processing
+    ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.bumptech.glide)
 }

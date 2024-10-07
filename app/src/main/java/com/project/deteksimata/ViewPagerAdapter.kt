@@ -11,7 +11,7 @@ import com.project.deteksimata.model.ArticleViewPagerModel
 
 class ViewPagerAdapter(
     private val items: ArrayList<ArticleViewPagerModel>,
-    private val onCardClick: (ArticleViewPagerModel) -> Unit // Listener untuk menangani klik pada item
+    private val onCardClick: (ArticleViewPagerModel) -> Unit
 ) : RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,19 +26,15 @@ class ViewPagerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-//        holder.imageView.setImageResource(item.imageResId)
         Glide.with(holder.itemView.context)
             .load(item.img)
             .into(holder.imageView)
         holder.title.text = item.title
-
-        // Menambahkan listener klik pada item
         holder.itemView.setOnClickListener {
-            onCardClick(item) // Panggil lambda function saat item diklik
+            onCardClick(item)
         }
     }
 
     override fun getItemCount(): Int = items.size
 }
 
-//data class CardItem(val imageResId: Int, val title: String)
